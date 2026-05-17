@@ -1,0 +1,529 @@
+/* Theme + accessibility effects applied on <html> */
+
+html.dark {
+  color-scheme: dark;
+}
+
+html:not(.dark) {
+  color-scheme: light;
+}
+
+/* --- Dark mode: slate / white surfaces --- */
+html.dark .bg-slate-50 {
+  background-color: rgb(2 6 23);
+}
+
+html.dark .bg-slate-50\/80 {
+  background-color: rgb(2 6 23 / 0.8);
+}
+
+html.dark .bg-slate-100 {
+  background-color: rgb(15 23 42);
+}
+
+html.dark .bg-slate-200 {
+  background-color: rgb(30 41 59);
+}
+
+html.dark .bg-white {
+  background-color: rgb(15 23 42);
+}
+
+html.dark .bg-white\/60 {
+  background-color: rgb(15 23 42 / 0.6);
+}
+
+html.dark .bg-white\/80 {
+  background-color: rgb(15 23 42 / 0.8);
+}
+
+html.dark .bg-white\/90 {
+  background-color: rgb(15 23 42 / 0.9);
+}
+
+html.dark .bg-white\/95 {
+  background-color: rgb(15 23 42 / 0.95);
+}
+
+/*
+ * Remap slate text on light surfaces in dark mode.
+ * Skip .mh-on-dark — video stage, scan viewer, etc. keep their own contrast.
+ */
+html.dark
+  :is(.text-slate-900, .text-slate-800, .text-slate-700, .text-slate-600, .text-slate-500, .text-slate-400, .text-slate-300):not(
+    .mh-on-dark *
+  ):not(.mh-on-dark) {
+  color: var(--mh-dark-text, rgb(226 232 240));
+}
+
+/* Intentional dark canvases — always light text (light + dark app theme) */
+.mh-on-dark .text-white {
+  color: #ffffff !important;
+}
+
+.mh-on-dark .text-slate-200,
+html.dark .mh-on-dark .text-slate-200 {
+  color: rgb(241 245 249) !important;
+}
+
+.mh-on-dark .text-slate-300,
+html.dark .mh-on-dark .text-slate-300 {
+  color: rgb(203 213 225) !important;
+}
+
+.mh-on-dark .text-slate-400,
+html.dark .mh-on-dark .text-slate-400 {
+  color: rgb(148 163 184) !important;
+}
+
+.mh-on-dark .text-teal-400 {
+  color: rgb(45 212 191) !important;
+}
+
+html.dark .text-slate-900 {
+  --mh-dark-text: rgb(248 250 252);
+}
+
+html.dark .text-slate-800 {
+  --mh-dark-text: rgb(241 245 249);
+}
+
+html.dark .text-slate-700 {
+  --mh-dark-text: rgb(226 232 240);
+}
+
+html.dark .text-slate-600 {
+  --mh-dark-text: rgb(203 213 225);
+}
+
+html.dark .text-slate-500,
+html.dark .text-slate-400 {
+  --mh-dark-text: rgb(148 163 184);
+}
+
+html.dark .text-slate-300 {
+  --mh-dark-text: rgb(203 213 225);
+}
+
+html.dark .border-slate-100 {
+  border-color: rgb(51 65 85);
+}
+
+html.dark .border-slate-200 {
+  border-color: rgb(51 65 85);
+}
+
+html.dark .border-slate-200\/80 {
+  border-color: rgb(51 65 85 / 0.8);
+}
+
+html.dark .border-slate-200\/90 {
+  border-color: rgb(51 65 85 / 0.9);
+}
+
+html.dark .border-slate-300 {
+  border-color: rgb(71 85 105);
+}
+
+html.dark .ring-slate-200 {
+  --tw-ring-color: rgb(51 65 85);
+}
+
+html.dark .ring-slate-200\/80 {
+  --tw-ring-color: rgb(51 65 85 / 0.8);
+}
+
+html.dark .divide-slate-200 > :not([hidden]) ~ :not([hidden]) {
+  border-color: rgb(51 65 85);
+}
+
+html.dark .hover\:bg-slate-100:hover {
+  background-color: rgb(30 41 59);
+}
+
+html.dark .hover\:bg-slate-50:hover {
+  background-color: rgb(30 41 59);
+}
+
+html.dark .hover\:text-slate-900:hover {
+  color: rgb(248 250 252);
+}
+
+html.dark .shadow-slate-200\/60 {
+  --tw-shadow-color: rgb(0 0 0 / 0.35);
+}
+
+html.dark .shadow-slate-900\/5 {
+  --tw-shadow-color: rgb(0 0 0 / 0.4);
+}
+
+/* --- Teal accents --- */
+html.dark .bg-teal-50 {
+  background-color: rgb(19 78 74 / 0.35);
+}
+
+html.dark .bg-teal-50\/40 {
+  background-color: rgb(19 78 74 / 0.25);
+}
+
+html.dark .bg-teal-50\/50 {
+  background-color: rgb(19 78 74 / 0.3);
+}
+
+html.dark .bg-teal-50\/80 {
+  background-color: rgb(19 78 74 / 0.35);
+}
+
+html.dark .bg-teal-50\/90 {
+  background-color: rgb(19 78 74 / 0.4);
+}
+
+html.dark .bg-teal-100 {
+  background-color: rgb(19 78 74 / 0.45);
+}
+
+html.dark .border-teal-100 {
+  border-color: rgb(45 212 191 / 0.25);
+}
+
+html.dark .border-teal-200 {
+  border-color: rgb(45 212 191 / 0.35);
+}
+
+html.dark .border-teal-300 {
+  border-color: rgb(45 212 191 / 0.45);
+}
+
+/* Solid teal surfaces (buttons, tabs, nav) — never lighten in dark mode */
+html.dark .bg-teal-600 {
+  background-color: rgb(13 148 136) !important;
+}
+
+html.dark .bg-teal-600.text-white,
+html.dark .bg-teal-600 .text-white,
+html.dark .tab-active-label {
+  color: #ffffff !important;
+}
+
+html.dark .bg-teal-700,
+html.dark .hover\:bg-teal-700:hover {
+  background-color: rgb(15 118 110) !important;
+}
+
+html.dark .file\:bg-teal-600::file-selector-button {
+  background-color: rgb(13 148 136) !important;
+}
+
+html.dark .file\:hover\:bg-teal-700:hover::file-selector-button {
+  background-color: rgb(15 118 110) !important;
+}
+
+html.dark .text-teal-600 {
+  color: rgb(45 212 191) !important;
+}
+
+html.dark .text-teal-700 {
+  color: rgb(94 234 212) !important;
+}
+
+html.dark .text-teal-800 {
+  color: rgb(94 234 212);
+}
+
+html.dark .text-teal-900 {
+  color: rgb(153 246 228);
+}
+
+html.dark .text-teal-950 {
+  color: rgb(204 251 241);
+}
+
+html.dark .hover\:bg-teal-50:hover {
+  background-color: rgb(19 78 74 / 0.45);
+}
+
+html.dark .hover\:bg-teal-50\/50:hover {
+  background-color: rgb(19 78 74 / 0.4);
+}
+
+html.dark .hover\:bg-teal-100:hover {
+  background-color: rgb(19 78 74 / 0.55);
+}
+
+html.dark .hover\:border-teal-300:hover {
+  border-color: rgb(45 212 191 / 0.55);
+}
+
+html.dark .hover\:bg-red-50:hover {
+  background-color: rgb(127 29 29 / 0.4);
+}
+
+html.dark .hover\:text-red-600:hover {
+  color: rgb(252 165 165);
+}
+
+/* --- Amber warnings --- */
+html.dark .bg-amber-50 {
+  background-color: rgb(120 53 15 / 0.35);
+}
+
+html.dark .bg-amber-50\/80 {
+  background-color: rgb(120 53 15 / 0.4);
+}
+
+html.dark .bg-amber-100 {
+  background-color: rgb(120 53 15 / 0.45);
+}
+
+html.dark .border-amber-200 {
+  border-color: rgb(251 191 36 / 0.35);
+}
+
+html.dark .border-amber-900 {
+  border-color: rgb(251 191 36 / 0.25);
+}
+
+html.dark .text-amber-900 {
+  color: rgb(253 230 138);
+}
+
+html.dark .text-amber-800 {
+  color: rgb(253 230 138);
+}
+
+html.dark .text-amber-950 {
+  color: rgb(254 243 199);
+}
+
+html.dark .text-emerald-700 {
+  color: rgb(110 231 183);
+}
+
+html.dark .text-violet-800 {
+  color: rgb(196 181 253);
+}
+
+html.dark .hover\:text-teal-700:hover,
+html.dark .hover\:text-teal-800:hover {
+  color: rgb(153 246 228);
+}
+
+html.dark .hover\:bg-amber-100:hover {
+  background-color: rgb(120 53 15 / 0.55);
+}
+
+/* --- Violet accents --- */
+html.dark .bg-violet-50 {
+  background-color: rgb(76 29 149 / 0.35);
+}
+
+html.dark .bg-violet-50\/40 {
+  background-color: rgb(76 29 149 / 0.28);
+}
+
+html.dark .bg-violet-50\/90 {
+  background-color: rgb(76 29 149 / 0.38);
+}
+
+html.dark .border-violet-100 {
+  border-color: rgb(167 139 250 / 0.3);
+}
+
+html.dark .border-violet-200 {
+  border-color: rgb(167 139 250 / 0.4);
+}
+
+html.dark .text-violet-900 {
+  color: rgb(221 214 254);
+}
+
+html.dark .text-violet-950 {
+  color: rgb(237 233 254);
+}
+
+html.dark .hover\:bg-violet-50:hover {
+  background-color: rgb(76 29 149 / 0.45);
+}
+
+html.dark .hover\:bg-violet-100:hover {
+  background-color: rgb(76 29 149 / 0.55);
+}
+
+/* --- Rose / red --- */
+html.dark .bg-rose-50 {
+  background-color: rgb(136 19 55 / 0.3);
+}
+
+html.dark .border-rose-200 {
+  border-color: rgb(251 113 133 / 0.35);
+}
+
+html.dark .border-rose-200\/80 {
+  border-color: rgb(251 113 133 / 0.3);
+}
+
+html.dark .bg-red-50 {
+  background-color: rgb(127 29 29 / 0.35);
+}
+
+html.dark .border-red-200 {
+  border-color: rgb(248 113 113 / 0.35);
+}
+
+html.dark .border-red-900 {
+  border-color: rgb(248 113 113 / 0.25);
+}
+
+html.dark .text-red-700 {
+  color: rgb(252 165 165);
+}
+
+html.dark .text-red-800 {
+  color: rgb(254 202 202);
+}
+
+/* --- Cyan --- */
+html.dark .bg-cyan-50 {
+  background-color: rgb(22 78 99 / 0.35);
+}
+
+/* --- Gradient stops (page shells, cards, headers) --- */
+html.dark .from-teal-50 {
+  --tw-gradient-from: rgb(2 6 23);
+  --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
+}
+
+html.dark .from-teal-50\/80 {
+  --tw-gradient-from: rgb(2 6 23 / 0.95);
+  --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
+}
+
+html.dark .from-teal-50\/90 {
+  --tw-gradient-from: rgb(2 6 23 / 0.98);
+  --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
+}
+
+html.dark .from-slate-50 {
+  --tw-gradient-from: rgb(15 23 42);
+  --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
+}
+
+html.dark .from-violet-50\/80 {
+  --tw-gradient-from: rgb(30 27 75 / 0.55);
+  --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
+}
+
+html.dark .from-rose-50 {
+  --tw-gradient-from: rgb(30 15 20);
+  --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
+}
+
+html.dark .via-white {
+  --tw-gradient-via: rgb(15 23 42);
+  --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-via) var(--tw-gradient-via-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
+}
+
+html.dark .to-white {
+  --tw-gradient-to: rgb(15 23 42);
+  --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
+}
+
+html.dark .to-slate-50 {
+  --tw-gradient-to: rgb(2 6 23);
+  --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
+}
+
+html.dark .to-slate-50\/80 {
+  --tw-gradient-to: rgb(2 6 23 / 0.85);
+  --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
+}
+
+html.dark .to-slate-100 {
+  --tw-gradient-to: rgb(2 6 23);
+  --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
+}
+
+html.dark .to-amber-50\/60 {
+  --tw-gradient-to: rgb(30 20 10 / 0.7);
+  --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
+}
+
+html.dark .to-cyan-50 {
+  --tw-gradient-to: rgb(15 35 45);
+  --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
+}
+
+/* --- Larger text --- */
+html.mh-a11y-large-text {
+  font-size: 118.75%;
+}
+
+/* --- High contrast --- */
+html.mh-a11y-high-contrast {
+  --foreground: oklch(0.05 0 0);
+  --background: oklch(1 0 0);
+  --border: oklch(0.2 0 0);
+  --muted-foreground: oklch(0.28 0 0);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.05 0 0);
+}
+
+html.dark.mh-a11y-high-contrast {
+  --foreground: oklch(1 0 0);
+  --background: oklch(0.08 0 0);
+  --border: oklch(0.88 0 0);
+  --muted-foreground: oklch(0.82 0 0);
+  --card: oklch(0.12 0 0);
+  --card-foreground: oklch(1 0 0);
+}
+
+html.mh-a11y-high-contrast body {
+  font-weight: 500;
+}
+
+html.mh-a11y-high-contrast .text-slate-600,
+html.mh-a11y-high-contrast .text-slate-500 {
+  color: var(--foreground) !important;
+  opacity: 0.85;
+}
+
+html.mh-a11y-high-contrast .border-slate-200,
+html.mh-a11y-high-contrast .border-border {
+  border-width: 2px;
+  border-color: var(--border) !important;
+}
+
+/* --- Reduce motion --- */
+html.mh-a11y-reduce-motion *,
+html.mh-a11y-reduce-motion *::before,
+html.mh-a11y-reduce-motion *::after {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+  scroll-behavior: auto !important;
+}
+
+/* --- Enhanced focus --- */
+html.mh-a11y-enhanced-focus :focus-visible {
+  outline: 3px solid var(--color-mh-teal-600, #0d9488) !important;
+  outline-offset: 3px !important;
+  box-shadow: 0 0 0 4px rgb(13 148 136 / 0.35) !important;
+}
+
+html.mh-a11y-enhanced-focus button:focus-visible,
+html.mh-a11y-enhanced-focus a:focus-visible,
+html.mh-a11y-enhanced-focus input:focus-visible,
+html.mh-a11y-enhanced-focus textarea:focus-visible,
+html.mh-a11y-enhanced-focus select:focus-visible {
+  outline-width: 3px !important;
+}
+
+/* --- Leaflet map (dark tiles applied via component; popup text) --- */
+html.dark .leaflet-popup-content-wrapper {
+  background: rgb(15 23 42);
+  color: rgb(226 232 240);
+}
+
+html.dark .leaflet-popup-tip {
+  background: rgb(15 23 42);
+}
