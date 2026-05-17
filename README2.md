@@ -2,6 +2,7 @@
 
 This frontend is separate from the MediHub backend repository. The backend server URL must be stored in this frontend project's own `.env` file.
 
+<<<<<<< HEAD
 **Base URL in this doc:** Endpoint lines use `<process.env.MEDIHUB_SERVER>` as a generic placeholder. In this Vite app, that is **`import.meta.env.VITE_MEDIHUB_SERVER`** (see **Environment Setup** and `getMedihubServer()` in `src/lib/config.ts`).
 
 ## Application architecture
@@ -172,11 +173,30 @@ src/
 **Local setup:** Copy [`.env.example`](./.env.example) → `.env` and [`.env.development.example`](./.env.development.example) → `.env.development` (both gitignored). Full steps: [docs/setup/local-environment.md](./docs/setup/local-environment.md).
 
 Create a **`.env` file in the project root** (next to `package.json`). Vite only exposes variables prefixed with `VITE_`:
+=======
+## Environment Setup
+
+Create a `.env` file inside the `frontend` folder:
+
+```env
+MEDIHUB_SERVER=https://your-medihub-backend-url.com
+```
+
+Use it in frontend API calls like:
+
+```js
+const server = process.env.MEDIHUB_SERVER;
+const response = await fetch(`${server}/api/health`);
+```
+
+If your frontend uses Vite, environment variables must start with `VITE_`:
+>>>>>>> 36457a9b9dfe2ed534940c8395d6195fb4385667
 
 ```env
 VITE_MEDIHUB_SERVER=https://your-medihub-backend-url.com
 ```
 
+<<<<<<< HEAD
 Rules:
 
 - **No trailing slash** on the base URL.
@@ -206,6 +226,21 @@ Not used in the client: `GOOGLE_PLACES_API_KEY`, `GEMINI_API_KEY`, `CLOUDINARY_*
 - **Next.js (browser)** — `NEXT_PUBLIC_MEDIHUB_SERVER` in `.env.local`.
 
 Do not add backend secret keys or third-party API keys in frontend `.env`. This Vite app only needs the server base URL and the optional `VITE_*` variables listed above.
+=======
+Vite usage:
+
+```js
+const server = import.meta.env.VITE_MEDIHUB_SERVER;
+```
+
+If your frontend uses Next.js and the value must be available in browser code:
+
+```env
+NEXT_PUBLIC_MEDIHUB_SERVER=https://your-medihub-backend-url.com
+```
+
+Do not add backend secret keys in frontend `.env`. Frontend should only store the backend server URL and public browser-only keys if needed.
+>>>>>>> 36457a9b9dfe2ed534940c8395d6195fb4385667
 
 ## Common Response Format
 
@@ -230,7 +265,11 @@ Error responses usually follow this shape:
 }
 ```
 
+<<<<<<< HEAD
 For protected routes, send cookies on every request:
+=======
+For protected routes, login cookies are used automatically if frontend requests include credentials:
+>>>>>>> 36457a9b9dfe2ed534940c8395d6195fb4385667
 
 ```js
 fetch(`${server}/api/users/me`, {
@@ -238,8 +277,11 @@ fetch(`${server}/api/users/me`, {
 });
 ```
 
+<<<<<<< HEAD
 If your API returns a **Bearer token** in the login/register JSON body, the bundled SPA also stores it (see `src/lib/auth/session.ts`) and sends `Authorization: Bearer <token>` together with `credentials: "include"` so `GET /api/users/me` works when cross-site cookies are not stored by the browser.
 
+=======
+>>>>>>> 36457a9b9dfe2ed534940c8395d6195fb4385667
 ## Public APIs
 
 ### Health Check
@@ -396,8 +438,11 @@ Response data contains:
 
 ### Nearby Hospital Locator
 
+<<<<<<< HEAD
 **Frontend status:** not wired yet — `/dashboard/hospital-locator` is a placeholder. These endpoints are backend contract only; the client does not embed Google Places or map API keys.
 
+=======
+>>>>>>> 36457a9b9dfe2ed534940c8395d6195fb4385667
 `GET <process.env.MEDIHUB_SERVER>/api/hospital-locator/nearby`
 
 - Request type: `GET`
@@ -535,10 +580,13 @@ Request:
 
 ## Authentication APIs
 
+<<<<<<< HEAD
 **Contract alignment with this repo:** `src/lib/api/auth.ts` and `src/lib/api/users.ts` call `POST` register, `POST` login, `GET` profile, and `POST` logout using paths from `src/lib/config.ts` (defaults below; overridable via `.env`). Register sends **all** required multipart fields from **Register** for `patient`, `doctor`, and `admin` (only `role` changes). **`fetchDoctorMe` / `createDoctorProfile`** (`src/lib/api/doctors.ts`) call `GET` / `POST` **`/api/doctors/me`** (override with `VITE_DOCTOR_ME_PATH`) for logged-in doctors. Login uses JSON `{ identifier, password }` as shown.
 
 If your server returns **`success: false`** with a message (e.g. route not found), fix the path on the server or set the matching `VITE_*_PATH` override in `.env`.
 
+=======
+>>>>>>> 36457a9b9dfe2ed534940c8395d6195fb4385667
 ### Register
 
 `POST <process.env.MEDIHUB_SERVER>/api/auth/register`
@@ -551,6 +599,7 @@ If your server returns **`success: false`** with a message (e.g. route not found
 - What it does: creates user account, uploads photo, and sets auth cookies.
 - Response type: JSON document
 
+<<<<<<< HEAD
 **Roles (`patient`, `doctor`, `admin`):** The contract is the **same** for every role at this step: send `role` with the multipart fields above. There is no alternate register payload per profile in this API. **Doctor-specific** data (specialization, experience, hospital, fees, schedule, qualification documents) belongs to **`POST /api/doctors/me`** after the doctor user exists and is logged in — see **Doctor APIs → Create Doctor Profile**. **Admin** accounts use the same register shape when your deployment allows self-service admin signup; otherwise admins are provisioned outside this flow.
 
 | `role` value | Required multipart fields (same set) |
@@ -561,6 +610,8 @@ If your server returns **`success: false`** with a message (e.g. route not found
 
 **This repo (`src/lib/auth/registerValidation.ts` + `registerAccount` in `src/lib/api/auth.ts`):** The form validates and submits **all** README-required fields for **every** role (no branch that omits e.g. `photo` for doctors). `FormData` keys match the names above; `photo` is the file part from the picker. If your deployed API expects extra keys for a specific role, add them in `registerAccount` and document them here.
 
+=======
+>>>>>>> 36457a9b9dfe2ed534940c8395d6195fb4385667
 Form data:
 
 ```txt
@@ -575,8 +626,11 @@ confirmPassword: StrongPass123
 photo: choose file
 ```
 
+<<<<<<< HEAD
 Use `role: doctor` or `role: admin` with the same field names when registering those account types.
 
+=======
+>>>>>>> 36457a9b9dfe2ed534940c8395d6195fb4385667
 Response data contains user object:
 
 ```json
@@ -628,10 +682,13 @@ Response data contains user object.
 - What it does: issues new access and refresh tokens.
 - Response type: JSON document
 
+<<<<<<< HEAD
 **All roles (patient, doctor, admin):** Use the **same** refresh endpoint for every account. Refresh proves “this browser still holds a valid refresh credential for **the user who logged in**”; it does not take a `role` query or separate paths per portal. The new access token (and `GET /api/users/me`) still reflect that user’s `role`. Doctor-only or admin-only APIs continue to enforce `role` on the server after refresh—no extra refresh flow per role.
 
 **This Vite app:** The bundled client does **not** call `/api/auth/refresh` yet. It sends `credentials: "include"` and may keep an access token in `sessionStorage` with `Authorization: Bearer`. To use your README refresh contract, add a small client (e.g. on `401` or before access-token expiry): `POST` refresh with credentials, run the same `extractAccessTokenFromAuthResponse` helper on the JSON if your API returns a new access token, then retry the failed request—**once** for all portals.
 
+=======
+>>>>>>> 36457a9b9dfe2ed534940c8395d6195fb4385667
 ### Logout
 
 `POST <process.env.MEDIHUB_SERVER>/api/auth/logout`
@@ -725,6 +782,7 @@ fetch(`${server}/api/users/me`, {
 - What it does: creates doctor profile with qualification documents.
 - Response type: JSON document
 
+<<<<<<< HEAD
 **This repo (`/register/doctor`):** The doctor signup page collects README **Register** fields and **Create Doctor Profile** fields in one form. It calls `POST /api/auth/register` with `role: doctor` first (session / Bearer token as returned by your API), then immediately `POST /api/doctors/me` with the professional multipart payload below. If the second step fails, the account still exists and the user can resubmit only the professional section or finish later from **Doctor professional profile** in the dashboard.
 
 **Multipart shape (this frontend):** In addition to repeating field names your backend might expect, the bundled app sends **`documentTitles`** as a single JSON array string (titles in the same order as files) and appends each file under **`documents`**. Example:
@@ -740,6 +798,8 @@ documents: <file1.pdf>
 documents: <file2.pdf>
 ```
 
+=======
+>>>>>>> 36457a9b9dfe2ed534940c8395d6195fb4385667
 ### Update Doctor Profile
 
 `PATCH <process.env.MEDIHUB_SERVER>/api/doctors/me`
@@ -1192,8 +1252,16 @@ Do not manually set `Content-Type` when sending `FormData`. The browser sets the
 
 ## Sensitive Data Rules
 
+<<<<<<< HEAD
 - Do not store backend secrets or third-party API keys in frontend `.env`.
 - **`GOOGLE_PLACES_API_KEY`, `GEMINI_API_KEY`, `CLOUDINARY_API_SECRET`, JWT secrets, and MongoDB URI are not used by this frontend** — keep them on the MediHub server only. This repo’s `.env.example` does not define them.
 - The browser bundle may include only `VITE_MEDIHUB_SERVER`, optional `VITE_*_PATH` overrides, OAuth redirect, hero video URL, and optional WebRTC ICE JSON — never provider API keys.
 - Password is sent only during register, login, and password update.
 - Uploaded medical files are sent to the backend, which handles Cloudinary (or equivalent) and stores URLs in MongoDB; the client never holds Cloudinary secrets.
+=======
+- Do not store backend secrets in frontend `.env`.
+- Do not expose `GOOGLE_PLACES_API_KEY`, `GEMINI_API_KEY`, `CLOUDINARY_API_SECRET`, JWT secrets, or MongoDB URI in frontend.
+- Frontend may store only the backend server URL and public browser keys.
+- Password is sent only during register, login, and password update.
+- Uploaded medical files are sent to backend, uploaded to Cloudinary, and stored as URLs in MongoDB.
+>>>>>>> 36457a9b9dfe2ed534940c8395d6195fb4385667
