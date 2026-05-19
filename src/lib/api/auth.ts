@@ -12,6 +12,7 @@ import {
   getAccessToken,
   setAccessToken,
 } from "@/lib/auth/session";
+import { authEncodingFlag, encodeAuthField } from "@/lib/auth/transportEncoding";
 import type { RegisterFormValues } from "@/lib/auth/registerValidation";
 import { formatApiFailure, isLikelyNetworkFailure, medihubFetch, parseJsonSafe, unwrapData } from "./client";
 import { normalizeUser } from "./users";
@@ -23,14 +24,15 @@ export async function registerAccount(
   const base = assertMedihubServerConfigured();
   const role = roleOverride ?? values.role;
   const fd = new FormData();
-  fd.append("firstName", values.firstName.trim());
-  fd.append("lastName", values.lastName.trim());
-  fd.append("username", values.username.trim());
-  fd.append("role", role);
-  fd.append("email", values.email.trim());
-  fd.append("phone", values.phone.trim());
-  fd.append("password", values.password);
-  fd.append("confirmPassword", values.confirmPassword);
+  fd.append("__authEncoding", authEncodingFlag());
+  fd.append("firstName", encodeAuthField(values.firstName.trim()));
+  fd.append("lastName", encodeAuthField(values.lastName.trim()));
+  fd.append("username", encodeAuthField(values.username.trim()));
+  fd.append("role", encodeAuthField(role));
+  fd.append("email", encodeAuthField(values.email.trim()));
+  fd.append("phone", encodeAuthField(values.phone.trim()));
+  fd.append("password", encodeAuthField(values.password));
+  fd.append("confirmPassword", encodeAuthField(values.confirmPassword));
   if (values.photo) {
     fd.append("photo", values.photo, values.photo.name);
   }
@@ -64,7 +66,11 @@ export async function loginWithPassword(identifier: string, password: string): P
     method: "POST",
     headers: { "Content-Type": "application/json" },
     credentials: "include",
-    body: JSON.stringify({ identifier, password }),
+    body: JSON.stringify({
+      __authEncoding: authEncodingFlag(),
+      identifier: encodeAuthField(identifier),
+      password: encodeAuthField(password),
+    }),
   });
 
   const body = await parseJsonSafe(res);
