@@ -1,4 +1,5 @@
 import { appendTranscriptLine, getSpeechRecognitionCtor } from "@/lib/consult/transcript";
+import { preferTranscriptDraft, writeTranscriptDraft } from "@/lib/consult/transcriptDraft";
 import { sanitizeUserFacingMessage } from "@/lib/userMessages";
 import { useCallback, useEffect, useRef, useState } from "react";
 
@@ -20,7 +21,7 @@ export function useConsultationTranscription(options: {
   const { active, appointmentId, initialText = "" } = options;
   const isSupported = getSpeechRecognitionCtor() !== null;
 
-  const [transcript, setTranscript] = useState(initialText);
+  const [transcript, setTranscript] = useState(() => preferTranscriptDraft(appointmentId, initialText));
   const [interimLine, setInterimLine] = useState("");
   const [isListening, setIsListening] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -41,10 +42,14 @@ export function useConsultationTranscription(options: {
   useEffect(() => {
     if (seededForAppointment.current === appointmentId) return;
     seededForAppointment.current = appointmentId;
-    setTranscript(initialText);
+    setTranscript(preferTranscriptDraft(appointmentId, initialText));
     setInterimLine("");
     setError(null);
   }, [appointmentId, initialText]);
+
+  useEffect(() => {
+    writeTranscriptDraft(appointmentId, transcript);
+  }, [appointmentId, transcript]);
 
   const stopRecognition = useCallback(() => {
     const rec = recognitionRef.current;

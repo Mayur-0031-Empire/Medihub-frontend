@@ -73,8 +73,16 @@ export function useVideoConsultation(appointmentId: string) {
   const ensureLocalMedia = useCallback(async () => {
     if (localStreamRef.current) return localStreamRef.current;
     const stream = await navigator.mediaDevices.getUserMedia({
-      video: true,
-      audio: true,
+      video: {
+        width: { ideal: 960 },
+        height: { ideal: 540 },
+        frameRate: { ideal: 24, max: 30 },
+      },
+      audio: {
+        echoCancellation: true,
+        noiseSuppression: true,
+        autoGainControl: true,
+      },
     });
     localStreamRef.current = stream;
     if (localVideoRef.current) {
@@ -96,6 +104,23 @@ export function useVideoConsultation(appointmentId: string) {
     [appointmentId],
   );
 
+  const tuneSenderForConsult = useCallback(async (sender: RTCRtpSender, track: MediaStreamTrack) => {
+    const params = sender.getParameters();
+    params.encodings = params.encodings?.length ? params.encodings : [{}];
+    if (track.kind === "video") {
+      params.encodings[0].maxBitrate = 650_000;
+      params.encodings[0].maxFramerate = 24;
+      params.degradationPreference = "maintain-framerate";
+    } else if (track.kind === "audio") {
+      params.encodings[0].maxBitrate = 64_000;
+    }
+    try {
+      await sender.setParameters(params);
+    } catch {
+      /* Some browsers reject sender tuning after negotiation starts. */
+    }
+  }, []);
+
   const ensurePeerConnection = useCallback(
     async (socket: Socket) => {
       if (pcRef.current) return pcRef.current;
@@ -105,7 +130,8 @@ export function useVideoConsultation(appointmentId: string) {
       pcRef.current = pc;
 
       for (const track of stream.getTracks()) {
-        pc.addTrack(track, stream);
+        const sender = pc.addTrack(track, stream);
+        void tuneSenderForConsult(sender, track);
       }
 
       pc.ontrack = (ev) => {
@@ -120,17 +146,33 @@ export function useVideoConsultation(appointmentId: string) {
 
       pc.onconnectionstatechange = () => {
         const s = pc.connectionState;
-        if (s === "connected") setStatus("connected");
-        if (s === "failed" || s === "disconnected") {
+        if (s === "connected") {
+          setError(null);
+          setStatus("connected");
+        }
+        if (s === "connecting" || s === "disconnected") {
+          setStatus("calling");
+        }
+        if (s === "failed") {
           setError("Peer connection lost.");
           setStatus("error");
+        }
+      };
+
+      pc.oniceconnectionstatechange = () => {
+        if (pc.iceConnectionState === "failed") {
+          try {
+            pc.restartIce();
+          } catch {
+            /* Older browsers may not support ICE restart. */
+          }
         }
       };
 
       emitIce(socket, pc);
       return pc;
     },
-    [emitIce, ensureLocalMedia],
+    [emitIce, ensureLocalMedia, tuneSenderForConsult],
   );
 
   const sendOffer = useCallback(

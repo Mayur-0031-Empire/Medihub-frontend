@@ -5,6 +5,7 @@ import { useConsultationTranscription } from "@/hooks/useConsultationTranscripti
 import {fetchAppointmentById, isServerConfigured, updateDoctorAppointmentNotes, userFacingError } from "@/lib/api";
 import { SERVICE_UNAVAILABLE } from "@/lib/userMessages";
 import { formatSlotRange, patientDisplayName } from "@/lib/appointments";
+import { clearTranscriptDraft } from "@/lib/consult/transcriptDraft";
 import type { AppointmentDetail } from "@/types/appointment";
 import { iconBrand, linkBrand, surfaceCard, textBody, textHeading, textSubtle } from "@/lib/themeClasses";
 import { cn } from "@/lib/utils";
@@ -76,7 +77,8 @@ export function DoctorConsultPage() {
   const handleBeforeLeave = useCallback(async () => {
     transcription.stop();
     await flushTranscript();
-  }, [flushTranscript, transcription]);
+    if (appointmentId) clearTranscriptDraft(appointmentId);
+  }, [appointmentId, flushTranscript, transcription]);
 
   if (!serverOk) {
     return (
