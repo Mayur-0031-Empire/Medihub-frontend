@@ -113,7 +113,6 @@ export function DashboardLayout() {
     return <Navigate to={dashboardHomePath(user.role)} replace />;
   }
 
-  const homePath = dashboardHomePath(user.role);
   const isPatient = user.role === "patient";
   const isDoctor = user.role === "doctor";
 
@@ -156,7 +155,7 @@ export function DashboardLayout() {
             >
               <Menu className="h-5 w-5" aria-hidden />
             </button>
-            <Logo to={homePath} size="sm" linkAriaLabel="Dashboard home" />
+            <Logo to="/" size="sm" linkAriaLabel="MediHub home" />
             <div className="hidden h-8 w-px bg-slate-200 sm:block dark:bg-slate-700" aria-hidden />
             <div className="min-w-0">
               <p className="truncate text-xs font-medium uppercase tracking-wide text-slate-500 dark:text-slate-400">
