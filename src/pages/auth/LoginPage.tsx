@@ -35,6 +35,22 @@ export function LoginPage() {
     if (p) setPortal(p);
   }, [searchParams]);
 
+  useEffect(() => {
+    if (!serverOk) return;
+    let cancelled = false;
+    void (async () => {
+      try {
+        const user = await fetchCurrentUser();
+        if (!cancelled) navigate(dashboardHomePath(user.role), { replace: true });
+      } catch {
+        /* no active session; show login form */
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [navigate, serverOk]);
+
   async function handleEmailLogin(e: FormEvent) {
     e.preventDefault();
     if (!serverOk) {

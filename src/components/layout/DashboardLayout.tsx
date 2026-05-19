@@ -15,9 +15,6 @@ import { LogOut, Menu, Settings } from "lucide-react";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { Link, Navigate, Outlet, useLocation, useNavigate } from "react-router-dom";
 
-const headerLinkClass =
-  "rounded-lg px-3 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-100 hover:text-slate-900 dark:text-slate-200 dark:hover:bg-slate-800";
-
 function isConnectionOrConfigMessage(message: string | null): boolean {
   if (!message) return false;
   const m = message.toLowerCase();
@@ -179,9 +176,6 @@ export function DashboardLayout() {
             >
               <Settings className="h-5 w-5" aria-hidden />
             </button>
-            <Link to={`/login?portal=${user.role}`} className={`hidden sm:inline-flex ${headerLinkClass}`}>
-              Use another account
-            </Link>
             <button
               type="button"
               onClick={() => void handleLogout()}
