@@ -9,9 +9,11 @@ import { useDoctorNotifications } from "@/hooks/useDoctorNotifications";
 import { fetchCurrentUser, logout, userFacingError } from "@/lib/api";
 import { dashboardHomePath } from "@/lib/dashboardPaths";
 import { sidebarItemsForRole } from "@/lib/dashboard/sidebarItems";
+import { resolveMediaUrl } from "@/lib/mediaUrl";
+import { displayName } from "@/lib/user/displayName";
 import type { User } from "@/types/auth";
 import type { DashboardOutletContext } from "@/pages/dashboard/context/outletContext";
-import { ChevronDown, LogOut, Menu, Settings } from "lucide-react";
+import { ChevronDown, LogOut, Menu, Settings, UserRound } from "lucide-react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Link, Navigate, NavLink, Outlet, useLocation, useNavigate } from "react-router-dom";
 
@@ -38,11 +40,13 @@ export function DashboardLayout() {
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const [desktopNavOpen, setDesktopNavOpen] = useState(true);
   const [featuresOpen, setFeaturesOpen] = useState(false);
+  const [mobileAccountOpen, setMobileAccountOpen] = useState(false);
   const [settingsOpen, setSettingsOpen] = useState(false);
   const featuresRef = useRef<HTMLDivElement>(null);
   const middleNavRef = useRef<HTMLElement>(null);
   const navToggleRef = useRef<HTMLButtonElement>(null);
   const desktopSidebarRef = useRef<HTMLElement>(null);
+  const mobileAccountRef = useRef<HTMLDivElement>(null);
 
   const refreshUser = useCallback(async () => {
     const me = await fetchCurrentUser();
@@ -118,12 +122,32 @@ export function DashboardLayout() {
     return () => document.removeEventListener("pointerdown", onPointerDown);
   }, [desktopNavOpen]);
 
+  useEffect(() => {
+    if (!mobileAccountOpen) return;
+
+    function onPointerDown(event: PointerEvent) {
+      if (mobileAccountRef.current?.contains(event.target as Node)) return;
+      setMobileAccountOpen(false);
+    }
+    function onKeyDown(event: KeyboardEvent) {
+      if (event.key === "Escape") setMobileAccountOpen(false);
+    }
+
+    document.addEventListener("pointerdown", onPointerDown);
+    document.addEventListener("keydown", onKeyDown);
+    return () => {
+      document.removeEventListener("pointerdown", onPointerDown);
+      document.removeEventListener("keydown", onKeyDown);
+    };
+  }, [mobileAccountOpen]);
+
   async function handleLogout() {
     try {
       await logout();
     } catch {
       /* still leave dashboard */
     }
+    setMobileAccountOpen(false);
     navigate("/", { replace: true });
   }
 
@@ -158,6 +182,19 @@ export function DashboardLayout() {
   const isPatient = user.role === "patient";
   const isDoctor = user.role === "doctor";
   const homePath = dashboardHomePath(user.role);
+  const userPhoto = resolveMediaUrl(user.photo);
+  const profilePath =
+    user.role === "doctor"
+      ? "/dashboard/doctor-profile"
+      : user.role === "admin"
+        ? "/dashboard/admin/profile"
+        : "/dashboard/patient/profile";
+  const mobileTopLinks = [
+    { to: "/dashboard/about", label: "About us" },
+    { to: "/dashboard/contact", label: "Contact us" },
+    { to: "/dashboard/questions", label: "Questions" },
+    { to: "/dashboard/reviews", label: "Reviews" },
+  ];
 
   const settingsFooter = (
     <button
@@ -319,6 +356,74 @@ export function DashboardLayout() {
           <div className="flex shrink-0 flex-wrap items-center justify-end gap-1.5 sm:gap-2">
             {isDoctor ? <DoctorNotificationBell /> : null}
             {isPatient ? <PatientNotificationBell /> : null}
+            <div ref={mobileAccountRef} className="relative sm:hidden">
+              <button
+                type="button"
+                onClick={() => setMobileAccountOpen((open) => !open)}
+                className="inline-flex h-10 w-10 items-center justify-center overflow-hidden rounded-xl border border-slate-200 bg-white text-slate-700 shadow-sm transition hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100 dark:hover:bg-slate-700"
+                aria-expanded={mobileAccountOpen}
+                aria-label="Open account menu"
+              >
+                {userPhoto ? (
+                  <img src={userPhoto} alt="" className="h-full w-full object-cover" />
+                ) : (
+                  <UserRound className="h-5 w-5" aria-hidden />
+                )}
+              </button>
+              <div
+                className={[
+                  "absolute right-0 top-[calc(100%+0.65rem)] z-50 w-64 origin-top-right rounded-2xl border border-slate-200 bg-white p-3 shadow-xl shadow-slate-900/15 transition duration-150 dark:border-slate-700 dark:bg-slate-900",
+                  mobileAccountOpen
+                    ? "pointer-events-auto translate-y-0 scale-100 opacity-100"
+                    : "pointer-events-none -translate-y-2 scale-95 opacity-0",
+                ].join(" ")}
+              >
+                <div className="flex items-center gap-3 border-b border-slate-100 pb-3 dark:border-slate-800">
+                  <span className="flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-teal-50 text-teal-700 ring-1 ring-teal-100 dark:bg-teal-950/40 dark:text-teal-300 dark:ring-teal-800">
+                    {userPhoto ? (
+                      <img src={userPhoto} alt="" className="h-full w-full object-cover" />
+                    ) : (
+                      <UserRound className="h-6 w-6" aria-hidden />
+                    )}
+                  </span>
+                  <div className="min-w-0">
+                    <p className="truncate text-sm font-semibold text-slate-900 dark:text-slate-100">
+                      {displayName(user)}
+                    </p>
+                    <p className="truncate text-xs capitalize text-slate-500">{user.role} account</p>
+                  </div>
+                </div>
+                <div className="mt-3 space-y-2">
+                  <Link
+                    to={profilePath}
+                    onClick={() => setMobileAccountOpen(false)}
+                    className="flex items-center gap-2 rounded-xl border border-slate-200 px-3 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-50 dark:border-slate-700 dark:text-slate-200 dark:hover:bg-slate-800"
+                  >
+                    <UserRound className="h-4 w-4" aria-hidden />
+                    Profile
+                  </Link>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setMobileAccountOpen(false);
+                      setSettingsOpen(true);
+                    }}
+                    className="flex w-full items-center gap-2 rounded-xl border border-slate-200 px-3 py-2 text-left text-sm font-semibold text-slate-700 transition hover:bg-slate-50 dark:border-slate-700 dark:text-slate-200 dark:hover:bg-slate-800"
+                  >
+                    <Settings className="h-4 w-4" aria-hidden />
+                    Settings
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => void handleLogout()}
+                    className="flex w-full items-center gap-2 rounded-xl bg-slate-900 px-3 py-2 text-left text-sm font-semibold text-white transition hover:bg-slate-800 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-white"
+                  >
+                    <LogOut className="h-4 w-4" aria-hidden />
+                    Sign out
+                  </button>
+                </div>
+              </div>
+            </div>
             <button
               type="button"
               onClick={() => setSettingsOpen(true)}
@@ -330,7 +435,7 @@ export function DashboardLayout() {
             <button
               type="button"
               onClick={() => void handleLogout()}
-              className="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm font-semibold text-slate-800 shadow-sm transition hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100 dark:hover:bg-slate-700"
+              className="hidden items-center gap-2 rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm font-semibold text-slate-800 shadow-sm transition hover:bg-slate-50 sm:inline-flex dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100 dark:hover:bg-slate-700"
               aria-label="Sign out"
             >
               <LogOut className="h-4 w-4 shrink-0" aria-hidden />
@@ -361,7 +466,33 @@ export function DashboardLayout() {
 
       <Sheet open={mobileNavOpen} onOpenChange={setMobileNavOpen}>
         <SheetContent side="left" className="flex w-[min(100%,20rem)] flex-col gap-0 p-0 lg:hidden">
-          {sidebar}
+          <div className="border-b border-slate-200 px-4 py-4 dark:border-slate-700">
+            <p className="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+              Main menu
+            </p>
+            <nav className="mt-3 flex flex-col gap-1" aria-label="Mobile dashboard pages">
+              {mobileTopLinks.map((item) => (
+                <NavLink
+                  key={item.to}
+                  to={item.to}
+                  onClick={() => setMobileNavOpen(false)}
+                  className={({ isActive }) =>
+                    [
+                      "rounded-xl px-3 py-2.5 text-sm font-medium transition",
+                      isActive
+                        ? "bg-teal-50 text-teal-800 dark:bg-teal-950/50 dark:text-teal-300"
+                        : "text-slate-700 hover:bg-slate-50 dark:text-slate-200 dark:hover:bg-slate-800",
+                    ].join(" ")
+                  }
+                >
+                  {item.label}
+                </NavLink>
+              ))}
+            </nav>
+          </div>
+          <div className="min-h-0 flex-1">
+            {sidebar}
+          </div>
         </SheetContent>
       </Sheet>
 
