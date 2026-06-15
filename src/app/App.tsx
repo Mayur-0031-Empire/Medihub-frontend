@@ -33,6 +33,9 @@ import { BmiBuddySetupPage } from "@/pages/dashboard/shared/BmiBuddySetupPage";
 import { HospitalLocatorPage } from "@/pages/dashboard/shared/HospitalLocatorPage";
 import { EmergencyAppointmentPage } from "@/pages/public/EmergencyAppointmentPage";
 import { AboutPage } from "@/pages/public/AboutPage";
+import { ContactPage } from "@/pages/public/ContactPage";
+import { FaqPage } from "@/pages/public/FaqPage";
+import { ReviewsPage } from "@/pages/public/ReviewsPage";
 import { AiAssistantFeaturePage } from "@/pages/public/features/AiAssistantFeaturePage";
 import { BmiBuddyFeaturePage } from "@/pages/public/features/BmiBuddyFeaturePage";
 import { HospitalLocatorFeaturePage } from "@/pages/public/features/HospitalLocatorFeaturePage";
@@ -51,6 +54,9 @@ export default function App() {
           <Route index element={<HomePage />} />
           <Route path="splash" element={<SplashPage />} />
           <Route path="about" element={<AboutPage />} />
+          <Route path="contact" element={<ContactPage />} />
+          <Route path="questions" element={<FaqPage />} />
+          <Route path="reviews" element={<ReviewsPage />} />
           <Route path="home" element={<HomePage />} />
           <Route path="portals" element={<PortalsPage />} />
           <Route path="features/ai-assistant" element={<AiAssistantFeaturePage />} />
@@ -84,6 +90,10 @@ export default function App() {
           <Route path="admin/profile" element={<AdminProfileRoute />} />
           <Route path="doctor/slots" element={<DoctorManageSlotsRoute />} />
           <Route path="doctor-profile" element={<DoctorProfilePage />} />
+          <Route path="about" element={<AboutPage />} />
+          <Route path="contact" element={<ContactPage />} />
+          <Route path="questions" element={<FaqPage />} />
+          <Route path="reviews" element={<ReviewsPage />} />
           <Route
             path="chatbot"
             element={

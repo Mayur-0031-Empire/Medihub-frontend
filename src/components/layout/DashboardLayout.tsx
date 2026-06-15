@@ -40,6 +40,7 @@ export function DashboardLayout() {
   const [featuresOpen, setFeaturesOpen] = useState(false);
   const [settingsOpen, setSettingsOpen] = useState(false);
   const featuresRef = useRef<HTMLDivElement>(null);
+  const middleNavRef = useRef<HTMLElement>(null);
   const navToggleRef = useRef<HTMLButtonElement>(null);
   const desktopSidebarRef = useRef<HTMLElement>(null);
 
@@ -109,6 +110,7 @@ export function DashboardLayout() {
       const target = event.target as Node;
       if (desktopSidebarRef.current?.contains(target)) return;
       if (navToggleRef.current?.contains(target)) return;
+      if (middleNavRef.current?.contains(target)) return;
       setDesktopNavOpen(false);
     }
 
@@ -212,20 +214,77 @@ export function DashboardLayout() {
               </p>
               <p className="truncate text-sm font-semibold capitalize text-slate-900 dark:text-slate-100">{user.role} portal</p>
             </div>
-            <div ref={featuresRef} className="relative hidden lg:block">
-              <button
-                type="button"
-                onClick={() => setFeaturesOpen((open) => !open)}
-                className="ml-2 inline-flex items-center gap-1 rounded-xl px-3 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-slate-800"
-                aria-expanded={featuresOpen}
-                aria-label="Open dashboard features"
+            <nav ref={middleNavRef} className="ml-4 hidden items-center gap-1 lg:flex" aria-label="Main">
+              <NavLink
+                to={homePath}
+                className={({ isActive }) =>
+                  [
+                    "rounded-lg px-3 py-2 text-sm font-semibold transition hover:bg-slate-100 dark:hover:bg-slate-800",
+                    isActive ? "text-teal-700 dark:text-teal-400" : "text-slate-600 dark:text-slate-300",
+                  ].join(" ")
+                }
+                end
               >
-                Features
-                <ChevronDown className="h-4 w-4" aria-hidden />
-              </button>
+                Home
+              </NavLink>
+              <NavLink
+                to="/dashboard/about"
+                className={({ isActive }) =>
+                  [
+                    "rounded-lg px-3 py-2 text-sm font-semibold transition hover:bg-slate-100 dark:hover:bg-slate-800",
+                    isActive ? "text-teal-700 dark:text-teal-400" : "text-slate-600 dark:text-slate-300",
+                  ].join(" ")
+                }
+              >
+                About us
+              </NavLink>
+              <NavLink
+                to="/dashboard/contact"
+                className={({ isActive }) =>
+                  [
+                    "rounded-lg px-3 py-2 text-sm font-semibold transition hover:bg-slate-100 dark:hover:bg-slate-800",
+                    isActive ? "text-teal-700 dark:text-teal-400" : "text-slate-600 dark:text-slate-300",
+                  ].join(" ")
+                }
+              >
+                Contact us
+              </NavLink>
+              <NavLink
+                to="/dashboard/questions"
+                className={({ isActive }) =>
+                  [
+                    "rounded-lg px-3 py-2 text-sm font-semibold transition hover:bg-slate-100 dark:hover:bg-slate-800",
+                    isActive ? "text-teal-700 dark:text-teal-400" : "text-slate-600 dark:text-slate-300",
+                  ].join(" ")
+                }
+              >
+                Questions
+              </NavLink>
+              <NavLink
+                to="/dashboard/reviews"
+                className={({ isActive }) =>
+                  [
+                    "rounded-lg px-3 py-2 text-sm font-semibold transition hover:bg-slate-100 dark:hover:bg-slate-800",
+                    isActive ? "text-teal-700 dark:text-teal-400" : "text-slate-600 dark:text-slate-300",
+                  ].join(" ")
+                }
+              >
+                Reviews
+              </NavLink>
+              <div ref={featuresRef} className="relative">
+                <button
+                  type="button"
+                  onClick={() => setFeaturesOpen((open) => !open)}
+                  className="inline-flex items-center gap-1 rounded-lg px-3 py-2 text-sm font-semibold text-slate-600 transition hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800"
+                  aria-expanded={featuresOpen}
+                  aria-label="Open features"
+                >
+                  Features
+                  <ChevronDown className="h-4 w-4" aria-hidden />
+                </button>
               <div
                 className={[
-                  "absolute left-2 top-[calc(100%+0.65rem)] z-40 w-72 origin-top-left rounded-2xl border border-slate-200 bg-white p-2 shadow-xl shadow-slate-900/15 transition duration-150 dark:border-slate-700 dark:bg-slate-900",
+                  "absolute left-0 top-[calc(100%+0.65rem)] z-40 w-72 origin-top-left rounded-2xl border border-slate-200 bg-white p-2 shadow-xl shadow-slate-900/15 transition duration-150 dark:border-slate-700 dark:bg-slate-900",
                   featuresOpen
                     ? "pointer-events-auto translate-y-0 scale-100 opacity-100"
                     : "pointer-events-none -translate-y-2 scale-95 opacity-0",
@@ -254,7 +313,8 @@ export function DashboardLayout() {
                   ))}
                 </ul>
               </div>
-            </div>
+              </div>
+            </nav>
           </div>
           <div className="flex shrink-0 flex-wrap items-center justify-end gap-1.5 sm:gap-2">
             {isDoctor ? <DoctorNotificationBell /> : null}

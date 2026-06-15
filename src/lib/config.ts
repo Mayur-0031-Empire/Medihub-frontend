@@ -293,3 +293,11 @@ export function appointmentNotificationsPath(): string {
 export function hospitalLocatorNearbyPath(): string {
   return import.meta.env.VITE_HOSPITAL_LOCATOR_NEARBY_PATH ?? "/api/hospital-locator/nearby";
 }
+
+export function feedbackReviewsPath(): string {
+  return import.meta.env.VITE_FEEDBACK_REVIEWS_PATH ?? "/api/feedback/reviews";
+}
+
+export function feedbackContactPath(): string {
+  return import.meta.env.VITE_FEEDBACK_CONTACT_PATH ?? "/api/feedback/contact";
+}

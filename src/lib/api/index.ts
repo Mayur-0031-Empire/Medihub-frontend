@@ -41,6 +41,8 @@ export { fetchBmiBuddyInfo, calculateBmi } from "./bmi";
 
 export { fetchNearbyHospitals, type FetchNearbyHospitalsParams } from "./hospital-locator";
 
+export { fetchReviews, createReview, submitContactQuery } from "./feedback";
+
 export {
   listAiChats,
   getAiChat,

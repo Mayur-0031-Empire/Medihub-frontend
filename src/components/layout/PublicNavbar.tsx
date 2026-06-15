@@ -101,13 +101,17 @@ export function PublicNavbar() {
               Home
             </NavLink>
             <NavLink to="/about" className={navClass}>
-              About
+              About us
             </NavLink>
-            {!user ? (
-              <NavLink to="/portals" className={navClass}>
-                Register
-              </NavLink>
-            ) : null}
+            <NavLink to="/contact" className={navClass}>
+              Contact us
+            </NavLink>
+            <NavLink to="/questions" className={navClass}>
+              Questions
+            </NavLink>
+            <NavLink to="/reviews" className={navClass}>
+              Reviews
+            </NavLink>
             <div className="group relative">
               <span className={cn(navLink, "cursor-default text-slate-600 dark:text-slate-300")}>Features</span>
               <div className="pointer-events-none absolute left-0 top-full z-30 pt-1 opacity-0 transition group-hover:pointer-events-auto group-hover:opacity-100 group-focus-within:pointer-events-auto group-focus-within:opacity-100">
@@ -255,16 +259,24 @@ export function PublicNavbar() {
               </li>
               <li>
                 <NavLink to="/about" className={navClass} onClick={() => setMenuOpen(false)}>
-                  About
+                  About us
                 </NavLink>
               </li>
-              {!user ? (
-                <li>
-                  <NavLink to="/portals" className={navClass} onClick={() => setMenuOpen(false)}>
-                    Register
-                  </NavLink>
-                </li>
-              ) : null}
+              <li>
+                <NavLink to="/contact" className={navClass} onClick={() => setMenuOpen(false)}>
+                  Contact us
+                </NavLink>
+              </li>
+              <li>
+                <NavLink to="/questions" className={navClass} onClick={() => setMenuOpen(false)}>
+                  Questions
+                </NavLink>
+              </li>
+              <li>
+                <NavLink to="/reviews" className={navClass} onClick={() => setMenuOpen(false)}>
+                  Reviews
+                </NavLink>
+              </li>
               {publicFeatures.map((f) => (
                 <li key={f.id}>
                   <Link to={f.path} className={navLink} onClick={() => setMenuOpen(false)}>
