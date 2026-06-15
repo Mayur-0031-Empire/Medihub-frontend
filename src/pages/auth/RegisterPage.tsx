@@ -3,6 +3,7 @@ import { RegisterRoleRadio } from "@/components/auth/RegisterRoleRadio";
 import {isServerConfigured, registerAccount, userFacingError } from "@/lib/api";
 import { SERVICE_UNAVAILABLE_AUTH } from "@/lib/userMessages";
 import { dashboardHomePath } from "@/lib/dashboardPaths";
+import { markJustRegistered } from "@/lib/dashboard/welcome";
 import { DoctorRegisterPage } from "@/pages/auth/DoctorRegisterPage";
 import { btnPrimary } from "@/lib/themeClasses";
 import { cn } from "@/lib/utils";
@@ -142,7 +143,8 @@ function RegisterForm({ fixedRole }: { fixedRole: PortalRole }) {
     setErrors({});
     setLoading(true);
     try {
-      await registerAccount(payload, fixedRole);
+      const user = await registerAccount(payload, fixedRole);
+      markJustRegistered(user._id);
       navigate(dashboardHomePath(fixedRole), { replace: true });
     } catch (err) {
       setFormError(userFacingError(err, "Registration failed."));

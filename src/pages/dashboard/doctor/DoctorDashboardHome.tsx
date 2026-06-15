@@ -2,7 +2,7 @@ import { DoctorDashboardCharts } from "@/components/dashboard/DoctorDashboardCha
 import { useDoctorNotifications } from "@/hooks/useDoctorNotifications";
 import { fetchDoctorMe, fetchMyAppointments, isServerConfigured } from "@/lib/api";
 import { SERVICE_UNAVAILABLE } from "@/lib/userMessages";
-import { displayName } from "@/lib/user/displayName";
+import { DASHBOARD_WELCOME_QUOTE, dashboardGreeting } from "@/lib/dashboard/welcome";
 import {
   Bell,
   CalendarPlus,
@@ -72,13 +72,10 @@ export function DoctorDashboardHome() {
       ) : null}
 
       <div className="flex flex-wrap items-center gap-2">
-        <h1 className="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">Doctor workspace</h1>
+        <h1 className="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">{dashboardGreeting(user)}</h1>
         <span className="rounded-full bg-teal-100 px-2.5 py-0.5 text-xs font-semibold text-teal-900">Doctor</span>
       </div>
-      <p className="mt-2 text-slate-600">
-        Welcome, <span className="font-medium text-slate-900">{displayName(user)}</span>. Manage your practice,
-        schedule, and patient visits from here.
-      </p>
+      <p className="mt-2 text-slate-600">{DASHBOARD_WELCOME_QUOTE}</p>
 
       {serverOk ? (
         <div className="mt-6 flex flex-wrap gap-3">

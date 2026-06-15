@@ -133,9 +133,7 @@ export function validateRegisterForm(values: RegisterFormValues): RegisterFieldE
     errors.confirmPassword = "Passwords do not match.";
   }
 
-  if (!values.photo) {
-    errors.photo = "Profile photo is required.";
-  } else {
+  if (values.photo) {
     if (!ALLOWED_IMAGE_TYPES.has(values.photo.type)) {
       errors.photo = "Use JPEG, PNG, or WebP.";
     } else if (values.photo.size > MAX_FILE_BYTES) {

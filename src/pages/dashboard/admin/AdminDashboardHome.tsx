@@ -1,5 +1,5 @@
 import { AdminDashboardCharts } from "@/components/dashboard/AdminDashboardCharts";
-import { displayName } from "@/lib/user/displayName";
+import { DASHBOARD_WELCOME_QUOTE, dashboardGreeting } from "@/lib/dashboard/welcome";
 import { CalendarPlus, ClipboardList, MapPinned, ShieldCheck, UserRound } from "lucide-react";
 import { Link, useOutletContext } from "react-router-dom";
 import type { DashboardOutletContext } from "../context/outletContext";
@@ -13,15 +13,12 @@ export function AdminDashboardHome() {
   return (
     <div className="mx-auto max-w-6xl">
       <div className="flex flex-wrap items-center gap-2">
-        <h1 className="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">Admin console</h1>
+        <h1 className="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">{dashboardGreeting(user)}</h1>
         <span className="inline-flex items-center gap-1 rounded-full bg-violet-100 px-2.5 py-0.5 text-xs font-semibold text-violet-900">
           Administrator
         </span>
       </div>
-      <p className="mt-2 text-slate-600">
-        Signed in as <span className="font-medium text-slate-900">{displayName(user)}</span>. Review doctor
-        submissions and monitor appointments.
-      </p>
+      <p className="mt-2 text-slate-600">{DASHBOARD_WELCOME_QUOTE}</p>
 
       <AdminDashboardCharts />
 

@@ -1,5 +1,5 @@
 import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { displayName } from "@/lib/user/displayName";
+import { DASHBOARD_WELCOME_QUOTE, dashboardGreeting } from "@/lib/dashboard/welcome";
 import { PatientVisitDocumentsPreview } from "@/components/patient/PatientVisitDocumentsPreview";
 import { usePatientNotifications } from "@/hooks/usePatientNotifications";
 import { Activity, Bell, CalendarPlus, FileText, FolderOpen, MapPinned, MessageSquare, UserRound } from "lucide-react";
@@ -59,15 +59,12 @@ const shortcuts = [
 
 export function PatientDashboardHome() {
   const { user } = useOutletContext<DashboardOutletContext>();
-  const name = displayName(user);
   const { unreadCount } = usePatientNotifications(true);
 
   return (
     <div className="mx-auto max-w-3xl animate-in fade-in duration-300">
-      <h1 className="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">Welcome back</h1>
-      <p className="mt-2 text-slate-600">
-        Signed in as <span className="font-medium text-slate-900">{name}</span>. Use the sidebar or shortcuts below.
-      </p>
+      <h1 className="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">{dashboardGreeting(user)}</h1>
+      <p className="mt-2 text-slate-600">{DASHBOARD_WELCOME_QUOTE}</p>
 
       {unreadCount > 0 ? (
         <Link

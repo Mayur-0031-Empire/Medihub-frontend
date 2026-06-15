@@ -4,6 +4,7 @@ import { DoctorProfessionalProfileFields } from "@/components/doctor/DoctorProfe
 import {createDoctorProfile, isServerConfigured, registerAccount, userFacingError } from "@/lib/api";
 import { SERVICE_UNAVAILABLE_AUTH } from "@/lib/userMessages";
 import { dashboardHomePath } from "@/lib/dashboardPaths";
+import { markJustRegistered } from "@/lib/dashboard/welcome";
 import {
   doctorFormToCreatePayload,
   hasDoctorProfileErrors,
@@ -223,7 +224,8 @@ export function DoctorRegisterPage() {
       setDoctorErrors({});
       setLoading(true);
       try {
-        await registerAccount(registerValues);
+        const user = await registerAccount(registerValues);
+        markJustRegistered(user._id);
         try {
           await createDoctorProfile(doctorFormToCreatePayload(doctorValues));
           navigate(dashboardHomePath("doctor"), { replace: true });
