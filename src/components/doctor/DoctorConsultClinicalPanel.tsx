@@ -1,6 +1,7 @@
 import { DocumentVitalsIntake } from "@/components/doctor/DocumentVitalsIntake";
 import { DoctorConsultPatientReports } from "@/components/doctor/DoctorConsultPatientReports";
 import { DoctorFilesUploadSection } from "@/components/doctor/DoctorFilesUploadSection";
+import { AppointmentStressCard } from "@/components/eeg/AppointmentStressCard";
 import {
   approveAppointmentPrescription,
   generateAppointmentAiDraft,
@@ -221,6 +222,8 @@ export function DoctorConsultClinicalPanel({
       </div>
 
       <div className="flex-1 space-y-4 overflow-y-auto p-4">
+        <AppointmentStressCard appointmentId={appointmentId} live={liveConsult} />
+
         <section className="rounded-xl border border-slate-200 bg-slate-50/50 p-3">
           <div className="flex items-center justify-between gap-2">
             <h3 className="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wide text-slate-700">

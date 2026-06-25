@@ -1,8 +1,27 @@
 const STORAGE_KEY = "medihub_access_token";
+const LEGACY_STORAGE_KEY = "medihub_access_token";
+
+type TokenListener = (token: string | null) => void;
+const tokenListeners = new Set<TokenListener>();
+
+function migrateLegacySessionToken(): void {
+  try {
+    if (localStorage.getItem(STORAGE_KEY)) return;
+    const legacy = sessionStorage.getItem(LEGACY_STORAGE_KEY);
+    if (legacy) {
+      localStorage.setItem(STORAGE_KEY, legacy);
+      sessionStorage.removeItem(LEGACY_STORAGE_KEY);
+    }
+  } catch {
+    /* private mode / disabled storage */
+  }
+}
+
+migrateLegacySessionToken();
 
 function readToken(): string | null {
   try {
-    return sessionStorage.getItem(STORAGE_KEY);
+    return localStorage.getItem(STORAGE_KEY);
   } catch {
     return null;
   }
@@ -10,11 +29,31 @@ function readToken(): string | null {
 
 function writeToken(token: string | null): void {
   try {
-    if (token) sessionStorage.setItem(STORAGE_KEY, token);
-    else sessionStorage.removeItem(STORAGE_KEY);
+    if (token) localStorage.setItem(STORAGE_KEY, token);
+    else localStorage.removeItem(STORAGE_KEY);
+    sessionStorage.removeItem(LEGACY_STORAGE_KEY);
   } catch {
     /* private mode / disabled storage */
   }
+}
+
+function notifyTokenListeners(token: string | null): void {
+  for (const listener of tokenListeners) {
+    listener(token);
+  }
+}
+
+if (typeof window !== "undefined") {
+  window.addEventListener("storage", (event) => {
+    if (event.key === STORAGE_KEY) {
+      notifyTokenListeners(event.newValue);
+    }
+  });
+}
+
+export function subscribeAccessToken(listener: TokenListener): () => void {
+  tokenListeners.add(listener);
+  return () => tokenListeners.delete(listener);
 }
 
 export function getAccessToken(): string | null {
@@ -23,10 +62,12 @@ export function getAccessToken(): string | null {
 
 export function setAccessToken(token: string | null): void {
   writeToken(token);
+  notifyTokenListeners(token);
 }
 
 export function clearAccessToken(): void {
   writeToken(null);
+  notifyTokenListeners(null);
 }
 
 /** Non-HttpOnly `accessToken` cookie only (HttpOnly cookies are invisible to JS). */

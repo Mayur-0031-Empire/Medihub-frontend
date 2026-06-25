@@ -301,3 +301,19 @@ export function feedbackReviewsPath(): string {
 export function feedbackContactPath(): string {
   return import.meta.env.VITE_FEEDBACK_CONTACT_PATH ?? "/api/feedback/contact";
 }
+
+export function eegPredictPath(): string {
+  return import.meta.env.VITE_EEG_PREDICT_PATH ?? "/api/eeg/predict";
+}
+
+export function eegSamplesPath(): string {
+  return import.meta.env.VITE_EEG_SAMPLES_PATH ?? "/api/eeg/samples";
+}
+
+export function eegLatestPath(): string {
+  return import.meta.env.VITE_EEG_LATEST_PATH ?? "/api/eeg/latest";
+}
+
+export function eegAppointmentLatestPath(appointmentId: string): string {
+  return `/api/eeg/appointment/${appointmentId}/latest`;
+}

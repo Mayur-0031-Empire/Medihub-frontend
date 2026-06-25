@@ -44,6 +44,17 @@ export { fetchNearbyHospitals, type FetchNearbyHospitalsParams } from "./hospita
 export { fetchReviews, createReview, submitContactQuery } from "./feedback";
 
 export {
+  fetchAppointmentEegStress,
+  fetchLatestEegStress,
+  predictEegStress,
+  sendEegSamples,
+  type EegSampleRequest,
+  type EegStressPayload,
+  type EegStressPrediction,
+  type StressLevel,
+} from "./eeg";
+
+export {
   listAiChats,
   getAiChat,
   createAiChat,

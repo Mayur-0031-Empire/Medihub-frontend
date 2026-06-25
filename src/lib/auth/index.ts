@@ -1,4 +1,5 @@
 export * from "./session";
+export { bootstrapSession } from "./bootstrapSession";
 export {
   ensureAccessTokenForSocket,
   resolveSocketConnectionAuth,

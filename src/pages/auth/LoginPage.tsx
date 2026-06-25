@@ -8,6 +8,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { fetchCurrentUser, isServerConfigured, loginWithPassword } from "@/lib/api";
+import { bootstrapSession } from "@/lib/auth/bootstrapSession";
+import { clearAccessToken } from "@/lib/auth/session";
 import { SERVICE_UNAVAILABLE_AUTH, userFacingError } from "@/lib/userMessages";
 import { dashboardHomePath, safeDashboardReturnTo } from "@/lib/dashboardPaths";
 import { notifyError } from "@/lib/notify";
@@ -40,6 +42,8 @@ export function LoginPage() {
     let cancelled = false;
     void (async () => {
       try {
+        const hasSession = await bootstrapSession();
+        if (!hasSession) return;
         const user = await fetchCurrentUser();
         if (!cancelled) navigate(dashboardHomePath(user.role), { replace: true });
       } catch {
@@ -64,6 +68,7 @@ export function LoginPage() {
 
     setLoading(true);
     try {
+      clearAccessToken();
       await loginWithPassword(identifier.trim(), password);
       const user = await fetchCurrentUser();
       const actual = normalizePortalRole(user.role);

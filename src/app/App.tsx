@@ -31,6 +31,7 @@ import { AiChatPage } from "@/pages/dashboard/shared/AiChatPage";
 import { BmiBuddyResultsPage } from "@/pages/dashboard/shared/BmiBuddyResultsPage";
 import { BmiBuddySetupPage } from "@/pages/dashboard/shared/BmiBuddySetupPage";
 import { HospitalLocatorPage } from "@/pages/dashboard/shared/HospitalLocatorPage";
+import { StressMonitorPage } from "@/pages/dashboard/shared/StressMonitorPage";
 import { EmergencyAppointmentPage } from "@/pages/public/EmergencyAppointmentPage";
 import { AboutPage } from "@/pages/public/AboutPage";
 import { ContactPage } from "@/pages/public/ContactPage";
@@ -123,6 +124,14 @@ export default function App() {
             element={
               <DashboardRoleGate allow={["patient", "admin"]}>
                 <HospitalLocatorPage />
+              </DashboardRoleGate>
+            }
+          />
+          <Route
+            path="stress-monitor"
+            element={
+              <DashboardRoleGate allow={["patient", "admin"]}>
+                <StressMonitorPage />
               </DashboardRoleGate>
             }
           />

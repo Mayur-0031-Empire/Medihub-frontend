@@ -11,6 +11,7 @@ import {
   LayoutDashboard,
   MapPinned,
   MessageSquare,
+  Brain,
   ShieldCheck,
   Stethoscope,
   UserRound,
@@ -28,6 +29,7 @@ export function sidebarItemsForRole(role: User["role"]): DashboardSidebarItem[] 
       { to: "/dashboard/patient/documents", label: "Visit documents", icon: FileText },
       { to: "/dashboard/patient/medical-records", label: "My uploads", icon: FolderOpen },
       { to: "/dashboard/chatbot", label: "Chatbot", icon: MessageSquare },
+      { to: "/dashboard/stress-monitor", label: "Stress monitor", icon: Brain },
       { to: "/dashboard/hospital-locator", label: "Hospital locator", icon: MapPinned },
     ];
   }
@@ -55,6 +57,7 @@ export function sidebarItemsForRole(role: User["role"]): DashboardSidebarItem[] 
   return [
     { to: home, label: "Overview", icon: LayoutDashboard, end: true },
     { to: "/dashboard/chatbot", label: "AI chatbot", icon: MessageSquare },
+    { to: "/dashboard/stress-monitor", label: "Stress monitor", icon: Brain },
     { to: "/dashboard/bmi-buddy", label: "BMI Buddy", icon: Activity },
     { to: "/dashboard/hospital-locator", label: "Hospital locator", icon: MapPinned },
     { to: "/dashboard/patient-services", label: "Patient services", icon: ClipboardList },

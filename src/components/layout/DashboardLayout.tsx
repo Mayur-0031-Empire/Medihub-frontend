@@ -7,6 +7,7 @@ import { SettingsSheet } from "@/components/settings/SettingsSheet";
 import { Sheet, SheetContent } from "@/components/ui/sheet";
 import { useDoctorNotifications } from "@/hooks/useDoctorNotifications";
 import { fetchCurrentUser, logout, userFacingError } from "@/lib/api";
+import { bootstrapSession } from "@/lib/auth/bootstrapSession";
 import { dashboardHomePath } from "@/lib/dashboardPaths";
 import { sidebarItemsForRole } from "@/lib/dashboard/sidebarItems";
 import { resolveMediaUrl } from "@/lib/mediaUrl";
@@ -67,6 +68,7 @@ export function DashboardLayout() {
     let cancelled = false;
     (async () => {
       try {
+        await bootstrapSession();
         const me = await fetchCurrentUser();
         if (!cancelled) {
           setUser(me);

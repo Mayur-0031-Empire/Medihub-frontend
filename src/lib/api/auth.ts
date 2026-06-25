@@ -9,7 +9,6 @@ import {
 import {
   clearAccessToken,
   extractAccessTokenFromAuthResponse,
-  getAccessToken,
   setAccessToken,
 } from "@/lib/auth/session";
 import { authEncodingFlag, encodeAuthField } from "@/lib/auth/transportEncoding";
@@ -40,6 +39,7 @@ export async function registerAccount(
   const res = await medihubFetch(`${base}${authPathRegister()}`, {
     method: "POST",
     credentials: "include",
+    authExchange: true,
     body: fd,
   });
 
@@ -66,6 +66,7 @@ export async function loginWithPassword(identifier: string, password: string): P
     method: "POST",
     headers: { "Content-Type": "application/json" },
     credentials: "include",
+    authExchange: true,
     body: JSON.stringify({
       __authEncoding: authEncodingFlag(),
       identifier: encodeAuthField(identifier),
@@ -92,8 +93,6 @@ export async function loginWithPassword(identifier: string, password: string): P
     extractAccessTokenFromAuthResponse(unwrapped.data);
   if (token) {
     setAccessToken(token);
-  } else if (!getAccessToken()) {
-    await refreshAuthToken();
   }
 }
 
@@ -110,6 +109,7 @@ export async function refreshAuthToken(): Promise<boolean> {
       const res = await medihubFetch(`${base}${authPathRefresh()}`, {
         method: "POST",
         credentials: "include",
+        authExchange: true,
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({}),
       });
@@ -144,6 +144,7 @@ export async function logout(): Promise<void> {
     await medihubFetch(`${base}${authPathLogout()}`, {
       method: "POST",
       credentials: "include",
+      authExchange: true,
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({}),
     });
