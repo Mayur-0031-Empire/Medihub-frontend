@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://medihub-frontend.vercel.app/sitemap.xml
