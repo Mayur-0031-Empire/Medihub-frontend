@@ -1,4 +1,5 @@
 import { ConsultPatientSidebar } from "@/components/consult/ConsultPatientSidebar";
+import { ConsultStressPanel } from "@/components/eeg/ConsultStressPanel";
 import { VideoConsultRoom } from "@/components/consult/VideoConsultRoom";
 import { useConsultAppointmentPoll } from "@/hooks/useConsultAppointmentPoll";
 import {fetchAppointmentById, isServerConfigured, userFacingError } from "@/lib/api";
@@ -104,12 +105,15 @@ export function PatientConsultPage() {
           </header>
 
           <div className="mt-6 grid gap-6 xl:grid-cols-[minmax(0,1fr)_minmax(300px,360px)] xl:items-start">
-            <VideoConsultRoom
-              appointmentId={appointmentId}
-              role="patient"
-              peerLabel={doctorName}
-              stageClassName="min-h-[min(52vh,520px)] xl:min-h-[min(72vh,680px)]"
-            />
+            <div className="space-y-4">
+              <VideoConsultRoom
+                appointmentId={appointmentId}
+                role="patient"
+                peerLabel={doctorName}
+                stageClassName="min-h-[min(52vh,520px)] xl:min-h-[min(72vh,680px)]"
+              />
+              <ConsultStressPanel appointmentId={appointmentId} role="patient" />
+            </div>
             <ConsultPatientSidebar
               appointmentId={appointmentId}
               appt={appt}

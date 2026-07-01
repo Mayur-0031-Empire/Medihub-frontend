@@ -1,3 +1,4 @@
+import { ConsultStressPanel } from "@/components/eeg/ConsultStressPanel";
 import { VideoConsultRoom } from "@/components/consult/VideoConsultRoom";
 import { DoctorConsultClinicalPanel } from "@/components/doctor/DoctorConsultClinicalPanel";
 import { useConsultAppointmentPoll } from "@/hooks/useConsultAppointmentPoll";
@@ -132,14 +133,17 @@ export function DoctorConsultPage() {
           </header>
 
           <div className="mt-6 grid gap-6 xl:grid-cols-[minmax(0,1fr)_minmax(320px,400px)] xl:items-start">
-            <VideoConsultRoom
-              appointmentId={appointmentId}
-              role="doctor"
-              peerLabel={patientName}
-              stageClassName="min-h-[min(52vh,520px)] xl:min-h-[min(72vh,680px)]"
-              onConnectionChange={setCallConnected}
-              onBeforeLeave={handleBeforeLeave}
-            />
+            <div className="space-y-4">
+              <VideoConsultRoom
+                appointmentId={appointmentId}
+                role="doctor"
+                peerLabel={patientName}
+                stageClassName="min-h-[min(52vh,520px)] xl:min-h-[min(72vh,680px)]"
+                onConnectionChange={setCallConnected}
+                onBeforeLeave={handleBeforeLeave}
+              />
+              <ConsultStressPanel appointmentId={appointmentId} role="doctor" live={callConnected} />
+            </div>
             <DoctorConsultClinicalPanel
               appointmentId={appointmentId}
               appt={appt}

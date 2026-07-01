@@ -1,5 +1,5 @@
 import { PageLoader } from "@/components/common/PageLoader";
-import { predictEegStress, type EegStressPrediction, type StressLevel } from "@/lib/api";
+import { fetchEegModelStatus, predictEegStress, type EegModelStatus, type EegStressPrediction, type StressLevel } from "@/lib/api";
 import { pickRandomDemoDataset, type EegDemoDataset } from "@/lib/eeg/demoDatasets";
 import { userFacingError } from "@/lib/userMessages";
 import { Activity, Brain, Play, Square, Zap } from "lucide-react";
@@ -122,6 +122,7 @@ export function StressMonitorPage() {
   const [samples, setSamples] = useState<number[]>([]);
   const [prediction, setPrediction] = useState<EegStressPrediction | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [modelStatus, setModelStatus] = useState<EegModelStatus | null>(null);
   const [predicting, setPredicting] = useState(false);
   const [activeDemo, setActiveDemo] = useState<EegDemoDataset | null>(null);
   const [sampleRate, setSampleRate] = useState(SAMPLE_RATE);
@@ -143,6 +144,30 @@ export function StressMonitorPage() {
   useEffect(() => {
     samplesRef.current = samples;
   }, [samples]);
+
+  const modelReady = modelStatus?.status === "ready";
+  const modelMessage = modelStatus?.message ?? "Model is loading.";
+
+  useEffect(() => {
+    let cancelled = false;
+    async function loadStatus() {
+      try {
+        const data = await fetchEegModelStatus();
+        if (!cancelled) setModelStatus(data);
+      } catch (err) {
+        if (!cancelled) {
+          setModelStatus({ status: "error", message: userFacingError(err, "Could not load EEG model status.") });
+        }
+      }
+    }
+
+    void loadStatus();
+    const id = window.setInterval(() => void loadStatus(), modelReady ? 15000 : 2500);
+    return () => {
+      cancelled = true;
+      window.clearInterval(id);
+    };
+  }, [modelReady]);
 
   const appendSamples = (incoming: number[]) => {
     if (incoming.length === 0) return;
@@ -438,7 +463,9 @@ export function StressMonitorPage() {
             </div>
           </dl>
 
-          <p className="mt-5 rounded-xl bg-slate-50 px-3 py-2 text-xs leading-relaxed text-slate-600">{serialStatus}</p>
+          <p className="mt-5 rounded-xl bg-slate-50 px-3 py-2 text-xs leading-relaxed text-slate-600">
+            {`${serialStatus}${modelReady ? " Model is ready to predict." : ` ${modelMessage}`}`}
+          </p>
           {predicting ? <PageLoader label="Predicting..." className="mt-5" /> : null}
           {prediction?.message ? <p className="mt-4 rounded-xl bg-amber-50 px-3 py-2 text-xs text-amber-900">{prediction.message}</p> : null}
           {error ? <p className="mt-4 rounded-xl bg-red-50 px-3 py-2 text-xs text-red-800">{error}</p> : null}

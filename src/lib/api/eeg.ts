@@ -4,6 +4,7 @@ import {
   eegLatestPath,
   eegPredictPath,
   eegSamplesPath,
+  eegStatusPath,
 } from "@/lib/config";
 import { formatApiFailure, medihubFetch, parseJsonSafe, unwrapData } from "./client";
 
@@ -41,6 +42,12 @@ export type EegSampleRequest = {
   sampleRate?: number | null;
 };
 
+export type EegModelStatus = {
+  service?: string;
+  status: "loading" | "ready" | "error" | "unconfigured" | string;
+  message?: string;
+};
+
 async function postEeg(path: string, payload: EegSampleRequest, fallback: string): Promise<EegStressPayload> {
   const base = assertMedihubServerConfigured();
   const res = await medihubFetch(`${base}${path}`, {
@@ -76,6 +83,20 @@ export async function fetchLatestEegStress(): Promise<EegStressPayload | null> {
     throw new Error(formatApiFailure(body, "Could not load EEG stress data."));
   }
   const unwrapped = unwrapData<EegStressPayload | null>(body);
+  if (!unwrapped.ok) throw new Error(unwrapped.message);
+  return unwrapped.data;
+}
+
+export async function fetchEegModelStatus(): Promise<EegModelStatus> {
+  const base = assertMedihubServerConfigured();
+  const res = await medihubFetch(`${base}${eegStatusPath()}`, {
+    credentials: "include",
+  });
+  const body = await parseJsonSafe(res);
+  if (!res.ok) {
+    throw new Error(formatApiFailure(body, "Could not load EEG model status."));
+  }
+  const unwrapped = unwrapData<EegModelStatus>(body);
   if (!unwrapped.ok) throw new Error(unwrapped.message);
   return unwrapped.data;
 }

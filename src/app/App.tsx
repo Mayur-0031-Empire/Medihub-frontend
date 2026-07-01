@@ -130,7 +130,7 @@ export default function App() {
           <Route
             path="stress-monitor"
             element={
-              <DashboardRoleGate allow={["patient", "admin"]}>
+              <DashboardRoleGate allow={["patient", "doctor", "admin"]}>
                 <StressMonitorPage />
               </DashboardRoleGate>
             }

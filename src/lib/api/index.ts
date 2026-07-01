@@ -45,9 +45,11 @@ export { fetchReviews, createReview, submitContactQuery } from "./feedback";
 
 export {
   fetchAppointmentEegStress,
+  fetchEegModelStatus,
   fetchLatestEegStress,
   predictEegStress,
   sendEegSamples,
+  type EegModelStatus,
   type EegSampleRequest,
   type EegStressPayload,
   type EegStressPrediction,

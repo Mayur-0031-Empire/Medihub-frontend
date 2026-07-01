@@ -52,6 +52,7 @@ export function sidebarItemsForRole(role: User["role"]): DashboardSidebarItem[] 
       { to: "/dashboard/doctor/slots", label: "Manage slots", icon: CalendarPlus },
       { to: "/dashboard/doctor/appointments", label: "Appointments", icon: ClipboardList },
       { to: "/dashboard/doctor/notifications", label: "Notifications", icon: Bell },
+      { to: "/dashboard/stress-monitor", label: "Stress monitor", icon: Brain },
     ];
   }
   return [

@@ -314,6 +314,10 @@ export function eegLatestPath(): string {
   return import.meta.env.VITE_EEG_LATEST_PATH ?? "/api/eeg/latest";
 }
 
+export function eegStatusPath(): string {
+  return import.meta.env.VITE_EEG_STATUS_PATH ?? "/api/eeg/status";
+}
+
 export function eegAppointmentLatestPath(appointmentId: string): string {
   return `/api/eeg/appointment/${appointmentId}/latest`;
 }
